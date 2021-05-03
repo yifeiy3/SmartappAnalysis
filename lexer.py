@@ -15,6 +15,7 @@ tokens = (
     'COMMA',
     'COLON',
     'IDENT',
+    'NUMBER',
 )
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
@@ -49,6 +50,10 @@ def t_STRING(t):
     t.value = t.value
     return t 
 
+def t_NUMBER(t):
+    r'[0-9]+'
+    return t 
+    
 def t_IDENT(t):
     r'[a-zA-Z0-9_.-]+'
     t.value = t.value
