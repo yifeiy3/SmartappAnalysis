@@ -24,7 +24,7 @@ def p_program_block(p):
         p[0] = ([p[1]], None)
     else:
         p[1][0].append(p[2])
-        p[0] = p[1]
+        p[0] = p[2]
 
 def p_notNeededBlock(p):
     '''
@@ -34,8 +34,8 @@ def p_notNeededBlock(p):
     pass 
 
 def p_funcDef(p):
-    '''funcDef : DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET NEWLINE
-            | DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET NEWLINE
+    '''funcDef : DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET
+            | DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET
     '''
     if(len(p) == 9):
         p[0] = ('funcDef', p[2], p[4], p[7])
@@ -43,7 +43,7 @@ def p_funcDef(p):
         p[0] = ('funcDef', p[2], [], p[6])
 
 def p_prefBlock(p):
-    'prefBlock : PREFERENCE LBRACKET sectionblocklist RBRACKET NEWLINE'
+    'prefBlock : PREFERENCE LBRACKET sectionblocklist RBRACKET'
     p[0] = ('preferences', p[3])
 
 def p_sectionblocklist(p):
@@ -56,7 +56,7 @@ def p_sectionblocklist(p):
         p[0] = [p[1]]
 
 def p_sectionblock(p):
-    'sectionblock : SECTION LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKET NEWLINE'
+    'sectionblock : SECTION LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKET'
     p[0] = p[6]
 
 def p_blockparamlist(p):
@@ -100,6 +100,7 @@ def p_stmtList(p):
         p[0] = p[1]
     else:
         p[0] = [p[1]]
+    print("we got here with p[0]: {0}".format(p[0]))
 
 def p_stmt(p):
     '''stmt : functionCall
@@ -108,7 +109,7 @@ def p_stmt(p):
 
 def p_stmt_error(p):
     'stmt : error NEWLINE'
-    print("we got here with p[2]: {0}".format(p[2]))
+    print("we got here with p[1]: {0}".format(p[1]))
     pass 
 
 def p_functionCall(p):
@@ -120,9 +121,8 @@ def p_functionCall(p):
         p[0] = ('functioncall', p[1], [])
 
 def p_functionCall_error(p):
-    '''functionCall : IDENT error NEWLINE
-                    | IDENT LPAREN error NEWLINE'''
-    print("we got here with p[2]: {0}".format(p[2]))
+    'functionCall : IDENT LPAREN error NEWLINE'
+    print("we got here with p[3]: {0}".format(p[3]))
     pass
 
 def p_functionWithObj(p):
@@ -131,7 +131,7 @@ def p_functionWithObj(p):
 
 def p_functionWithObj_error(p):
     'functionWithObj : IDENT DOT error NEWLINE'
-    print("we got here with p[2]: {0}".format(p[2]))
+    print("we got here with p[3]: {0}".format(p[3]))
     pass
 
 def p_paramlist(p):
@@ -188,17 +188,14 @@ if __name__ == '__main__':
     # Build the parser
     parser = yacc.yacc()
     
-    s = '''
-            def appTouch(evt) {
-                attr.each{
-                    log.debug "ok. $it.name, $it.values"
-                }
-                switchesoff.off()
-            }
-        '''
+    s = ''' def timedTouch(evt){
+	    log.debug "a timed modification of this app"
+        runIn(timer, appTouch)
+    }'''
     # s = '''preferences {
     #     section("Turn on...") {
     #         input "switches", "capability.switch", multiple: true
-    #     } }'''
+    #         } 
+    #     }'''
     result = parser.parse(s, lexer=MyLexer())
     print(result)

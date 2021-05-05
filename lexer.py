@@ -52,11 +52,11 @@ def MyLexer():
         return t 
     
     def t_LBRACKET(t):
-        r'(\n*)(\s)*\{'
+        r'(\n*)(\s)*\{(\n*)(\s)*'
         return t
 
     def t_RBRACKET(t):
-        r'\}'
+        r'(\n*)(\s)*\}(\n*)(\s)*'
         return t
 
     def t_BOOL(t):
@@ -96,7 +96,7 @@ def MyLexer():
         return t 
         
     def t_IDENT(t):
-        r'[a-zA-Z0-9_.-]+'
+        r'[a-zA-Z0-9_-]+'
         return t 
 
     def t_NEWLINE(t):
@@ -127,12 +127,10 @@ if __name__ == '__main__':
     #         subscribe(app, timedTouch)
     #     }'''
     data = '''
-            def appTouch(evt) {
-                attr.each{
-                    log.debug "ok. $it.name, $it.values"
-                }
-            }
-        '''
+            def appTouch(evt) 
+            {
+                switchesoff.off()
+            }'''
     lexer = MyLexer()
     lexer.input(data)
     while True:
