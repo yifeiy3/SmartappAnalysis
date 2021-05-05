@@ -1,0 +1,1105 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    COMMENT
+    EQUAL
+    LONGCOMMENT
+    MATH
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> program NEWLINE funcDef
+Rule 2     program -> funcDef
+Rule 3     program -> program NEWLINE prefBlock
+Rule 4     program -> prefBlock
+Rule 5     program -> notNeededBlock
+Rule 6     program -> program NEWLINE notNeededBlock
+Rule 7     notNeededBlock -> DEFINITION LPAREN error RPAREN
+Rule 8     notNeededBlock -> MAPPING LBRACKET error RBRACKET
+Rule 9     funcDef -> DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET NEWLINE
+Rule 10    funcDef -> DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET NEWLINE
+Rule 11    prefBlock -> PREFERENCE LBRACKET sectionblocklist RBRACKET NEWLINE
+Rule 12    sectionblocklist -> sectionblock
+Rule 13    sectionblocklist -> sectionblocklist NEWLINE sectionblock
+Rule 14    sectionblock -> SECTION LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKET NEWLINE
+Rule 15    blockparamlist -> blockparamlist COMMA blockparam
+Rule 16    blockparamlist -> blockparam
+Rule 17    blockparam -> INPUT STRING
+Rule 18    blockparam -> STRING
+Rule 19    blockparam -> MULTIPLE COLON BOOL
+Rule 20    blockparam -> REQUIRED COLON BOOL
+Rule 21    stmtList -> stmtList NEWLINE stmt
+Rule 22    stmtList -> stmt
+Rule 23    stmtList -> stmtList stmt
+Rule 24    stmt -> functionCall
+Rule 25    stmt -> functionWithObj
+Rule 26    stmt -> error NEWLINE
+Rule 27    functionCall -> IDENT LPAREN paramlist RPAREN
+Rule 28    functionCall -> IDENT LPAREN RPAREN
+Rule 29    functionCall -> IDENT error NEWLINE
+Rule 30    functionCall -> IDENT LPAREN error NEWLINE
+Rule 31    functionWithObj -> IDENT DOT functionCall
+Rule 32    functionWithObj -> IDENT DOT error NEWLINE
+Rule 33    paramlist -> paramlist COMMA param
+Rule 34    paramlist -> param
+Rule 35    param -> identparam
+Rule 36    param -> strparam
+Rule 37    param -> numparam
+Rule 38    identparam -> IDENT
+Rule 39    identparam -> IDENT NEWLINE
+Rule 40    identparam -> NEWLINE IDENT
+Rule 41    strparam -> STRING
+Rule 42    strparam -> STRING NEWLINE
+Rule 43    strparam -> NEWLINE STRING
+Rule 44    numparam -> NUMBER
+Rule 45    numparam -> NUMBER NEWLINE
+Rule 46    numparam -> NEWLINE NUMBER
+
+Terminals, with rules where they appear
+
+BOOL                 : 19 20
+COLON                : 19 20
+COMMA                : 15 33
+COMMENT              : 
+DEF                  : 9 10
+DEFINITION           : 7
+DOT                  : 31 32
+EQUAL                : 
+IDENT                : 9 10 27 28 29 30 31 32 38 39 40
+INPUT                : 17
+LBRACKET             : 8 9 10 11 14
+LONGCOMMENT          : 
+LPAREN               : 7 9 10 14 27 28 30
+MAPPING              : 8
+MATH                 : 
+MULTIPLE             : 19
+NEWLINE              : 1 3 6 9 10 11 13 14 21 26 29 30 32 39 40 42 43 45 46
+NUMBER               : 44 45 46
+PREFERENCE           : 11
+RBRACKET             : 8 9 10 11 14
+REQUIRED             : 20
+RPAREN               : 7 9 10 14 27 28
+SECTION              : 14
+STRING               : 14 17 18 41 42 43
+error                : 7 8 26 29 30 32
+
+Nonterminals, with rules where they appear
+
+blockparam           : 15 16
+blockparamlist       : 14 15
+funcDef              : 1 2
+functionCall         : 24 31
+functionWithObj      : 25
+identparam           : 35
+notNeededBlock       : 5 6
+numparam             : 37
+param                : 33 34
+paramlist            : 9 27 33
+prefBlock            : 3 4
+program              : 1 3 6 0
+sectionblock         : 12 13
+sectionblocklist     : 11 13
+stmt                 : 21 22 23
+stmtList             : 9 10 21 23
+strparam             : 36
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . program NEWLINE funcDef
+    (2) program -> . funcDef
+    (3) program -> . program NEWLINE prefBlock
+    (4) program -> . prefBlock
+    (5) program -> . notNeededBlock
+    (6) program -> . program NEWLINE notNeededBlock
+    (9) funcDef -> . DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET NEWLINE
+    (10) funcDef -> . DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET NEWLINE
+    (11) prefBlock -> . PREFERENCE LBRACKET sectionblocklist RBRACKET NEWLINE
+    (7) notNeededBlock -> . DEFINITION LPAREN error RPAREN
+    (8) notNeededBlock -> . MAPPING LBRACKET error RBRACKET
+
+    DEF             shift and go to state 5
+    PREFERENCE      shift and go to state 6
+    DEFINITION      shift and go to state 7
+    MAPPING         shift and go to state 8
+
+    program                        shift and go to state 1
+    funcDef                        shift and go to state 2
+    prefBlock                      shift and go to state 3
+    notNeededBlock                 shift and go to state 4
+
+state 1
+
+    (0) S' -> program .
+    (1) program -> program . NEWLINE funcDef
+    (3) program -> program . NEWLINE prefBlock
+    (6) program -> program . NEWLINE notNeededBlock
+
+    NEWLINE         shift and go to state 9
+
+
+state 2
+
+    (2) program -> funcDef .
+
+    NEWLINE         reduce using rule 2 (program -> funcDef .)
+    $end            reduce using rule 2 (program -> funcDef .)
+
+
+state 3
+
+    (4) program -> prefBlock .
+
+    NEWLINE         reduce using rule 4 (program -> prefBlock .)
+    $end            reduce using rule 4 (program -> prefBlock .)
+
+
+state 4
+
+    (5) program -> notNeededBlock .
+
+    NEWLINE         reduce using rule 5 (program -> notNeededBlock .)
+    $end            reduce using rule 5 (program -> notNeededBlock .)
+
+
+state 5
+
+    (9) funcDef -> DEF . IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET NEWLINE
+    (10) funcDef -> DEF . IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET NEWLINE
+
+    IDENT           shift and go to state 10
+
+
+state 6
+
+    (11) prefBlock -> PREFERENCE . LBRACKET sectionblocklist RBRACKET NEWLINE
+
+    LBRACKET        shift and go to state 11
+
+
+state 7
+
+    (7) notNeededBlock -> DEFINITION . LPAREN error RPAREN
+
+    LPAREN          shift and go to state 12
+
+
+state 8
+
+    (8) notNeededBlock -> MAPPING . LBRACKET error RBRACKET
+
+    LBRACKET        shift and go to state 13
+
+
+state 9
+
+    (1) program -> program NEWLINE . funcDef
+    (3) program -> program NEWLINE . prefBlock
+    (6) program -> program NEWLINE . notNeededBlock
+    (9) funcDef -> . DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET NEWLINE
+    (10) funcDef -> . DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET NEWLINE
+    (11) prefBlock -> . PREFERENCE LBRACKET sectionblocklist RBRACKET NEWLINE
+    (7) notNeededBlock -> . DEFINITION LPAREN error RPAREN
+    (8) notNeededBlock -> . MAPPING LBRACKET error RBRACKET
+
+    DEF             shift and go to state 5
+    PREFERENCE      shift and go to state 6
+    DEFINITION      shift and go to state 7
+    MAPPING         shift and go to state 8
+
+    funcDef                        shift and go to state 14
+    prefBlock                      shift and go to state 15
+    notNeededBlock                 shift and go to state 16
+
+state 10
+
+    (9) funcDef -> DEF IDENT . LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET NEWLINE
+    (10) funcDef -> DEF IDENT . LPAREN RPAREN LBRACKET stmtList RBRACKET NEWLINE
+
+    LPAREN          shift and go to state 17
+
+
+state 11
+
+    (11) prefBlock -> PREFERENCE LBRACKET . sectionblocklist RBRACKET NEWLINE
+    (12) sectionblocklist -> . sectionblock
+    (13) sectionblocklist -> . sectionblocklist NEWLINE sectionblock
+    (14) sectionblock -> . SECTION LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKET NEWLINE
+
+    SECTION         shift and go to state 20
+
+    sectionblocklist               shift and go to state 18
+    sectionblock                   shift and go to state 19
+
+state 12
+
+    (7) notNeededBlock -> DEFINITION LPAREN . error RPAREN
+
+    error           shift and go to state 21
+
+
+state 13
+
+    (8) notNeededBlock -> MAPPING LBRACKET . error RBRACKET
+
+    error           shift and go to state 22
+
+
+state 14
+
+    (1) program -> program NEWLINE funcDef .
+
+    NEWLINE         reduce using rule 1 (program -> program NEWLINE funcDef .)
+    $end            reduce using rule 1 (program -> program NEWLINE funcDef .)
+
+
+state 15
+
+    (3) program -> program NEWLINE prefBlock .
+
+    NEWLINE         reduce using rule 3 (program -> program NEWLINE prefBlock .)
+    $end            reduce using rule 3 (program -> program NEWLINE prefBlock .)
+
+
+state 16
+
+    (6) program -> program NEWLINE notNeededBlock .
+
+    NEWLINE         reduce using rule 6 (program -> program NEWLINE notNeededBlock .)
+    $end            reduce using rule 6 (program -> program NEWLINE notNeededBlock .)
+
+
+state 17
+
+    (9) funcDef -> DEF IDENT LPAREN . paramlist RPAREN LBRACKET stmtList RBRACKET NEWLINE
+    (10) funcDef -> DEF IDENT LPAREN . RPAREN LBRACKET stmtList RBRACKET NEWLINE
+    (33) paramlist -> . paramlist COMMA param
+    (34) paramlist -> . param
+    (35) param -> . identparam
+    (36) param -> . strparam
+    (37) param -> . numparam
+    (38) identparam -> . IDENT
+    (39) identparam -> . IDENT NEWLINE
+    (40) identparam -> . NEWLINE IDENT
+    (41) strparam -> . STRING
+    (42) strparam -> . STRING NEWLINE
+    (43) strparam -> . NEWLINE STRING
+    (44) numparam -> . NUMBER
+    (45) numparam -> . NUMBER NEWLINE
+    (46) numparam -> . NEWLINE NUMBER
+
+    RPAREN          shift and go to state 25
+    IDENT           shift and go to state 23
+    NEWLINE         shift and go to state 26
+    STRING          shift and go to state 31
+    NUMBER          shift and go to state 32
+
+    paramlist                      shift and go to state 24
+    param                          shift and go to state 27
+    identparam                     shift and go to state 28
+    strparam                       shift and go to state 29
+    numparam                       shift and go to state 30
+
+state 18
+
+    (11) prefBlock -> PREFERENCE LBRACKET sectionblocklist . RBRACKET NEWLINE
+    (13) sectionblocklist -> sectionblocklist . NEWLINE sectionblock
+
+    RBRACKET        shift and go to state 33
+    NEWLINE         shift and go to state 34
+
+
+state 19
+
+    (12) sectionblocklist -> sectionblock .
+
+    RBRACKET        reduce using rule 12 (sectionblocklist -> sectionblock .)
+    NEWLINE         reduce using rule 12 (sectionblocklist -> sectionblock .)
+
+
+state 20
+
+    (14) sectionblock -> SECTION . LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKET NEWLINE
+
+    LPAREN          shift and go to state 35
+
+
+state 21
+
+    (7) notNeededBlock -> DEFINITION LPAREN error . RPAREN
+
+    RPAREN          shift and go to state 36
+
+
+state 22
+
+    (8) notNeededBlock -> MAPPING LBRACKET error . RBRACKET
+
+    RBRACKET        shift and go to state 37
+
+
+state 23
+
+    (38) identparam -> IDENT .
+    (39) identparam -> IDENT . NEWLINE
+
+    RPAREN          reduce using rule 38 (identparam -> IDENT .)
+    COMMA           reduce using rule 38 (identparam -> IDENT .)
+    NEWLINE         shift and go to state 38
+
+
+state 24
+
+    (9) funcDef -> DEF IDENT LPAREN paramlist . RPAREN LBRACKET stmtList RBRACKET NEWLINE
+    (33) paramlist -> paramlist . COMMA param
+
+    RPAREN          shift and go to state 39
+    COMMA           shift and go to state 40
+
+
+state 25
+
+    (10) funcDef -> DEF IDENT LPAREN RPAREN . LBRACKET stmtList RBRACKET NEWLINE
+
+    LBRACKET        shift and go to state 41
+
+
+state 26
+
+    (40) identparam -> NEWLINE . IDENT
+    (43) strparam -> NEWLINE . STRING
+    (46) numparam -> NEWLINE . NUMBER
+
+    IDENT           shift and go to state 42
+    STRING          shift and go to state 43
+    NUMBER          shift and go to state 44
+
+
+state 27
+
+    (34) paramlist -> param .
+
+    RPAREN          reduce using rule 34 (paramlist -> param .)
+    COMMA           reduce using rule 34 (paramlist -> param .)
+
+
+state 28
+
+    (35) param -> identparam .
+
+    RPAREN          reduce using rule 35 (param -> identparam .)
+    COMMA           reduce using rule 35 (param -> identparam .)
+
+
+state 29
+
+    (36) param -> strparam .
+
+    RPAREN          reduce using rule 36 (param -> strparam .)
+    COMMA           reduce using rule 36 (param -> strparam .)
+
+
+state 30
+
+    (37) param -> numparam .
+
+    RPAREN          reduce using rule 37 (param -> numparam .)
+    COMMA           reduce using rule 37 (param -> numparam .)
+
+
+state 31
+
+    (41) strparam -> STRING .
+    (42) strparam -> STRING . NEWLINE
+
+    RPAREN          reduce using rule 41 (strparam -> STRING .)
+    COMMA           reduce using rule 41 (strparam -> STRING .)
+    NEWLINE         shift and go to state 45
+
+
+state 32
+
+    (44) numparam -> NUMBER .
+    (45) numparam -> NUMBER . NEWLINE
+
+    RPAREN          reduce using rule 44 (numparam -> NUMBER .)
+    COMMA           reduce using rule 44 (numparam -> NUMBER .)
+    NEWLINE         shift and go to state 46
+
+
+state 33
+
+    (11) prefBlock -> PREFERENCE LBRACKET sectionblocklist RBRACKET . NEWLINE
+
+    NEWLINE         shift and go to state 47
+
+
+state 34
+
+    (13) sectionblocklist -> sectionblocklist NEWLINE . sectionblock
+    (14) sectionblock -> . SECTION LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKET NEWLINE
+
+    SECTION         shift and go to state 20
+
+    sectionblock                   shift and go to state 48
+
+state 35
+
+    (14) sectionblock -> SECTION LPAREN . STRING RPAREN LBRACKET blockparamlist RBRACKET NEWLINE
+
+    STRING          shift and go to state 49
+
+
+state 36
+
+    (7) notNeededBlock -> DEFINITION LPAREN error RPAREN .
+
+    NEWLINE         reduce using rule 7 (notNeededBlock -> DEFINITION LPAREN error RPAREN .)
+    $end            reduce using rule 7 (notNeededBlock -> DEFINITION LPAREN error RPAREN .)
+
+
+state 37
+
+    (8) notNeededBlock -> MAPPING LBRACKET error RBRACKET .
+
+    NEWLINE         reduce using rule 8 (notNeededBlock -> MAPPING LBRACKET error RBRACKET .)
+    $end            reduce using rule 8 (notNeededBlock -> MAPPING LBRACKET error RBRACKET .)
+
+
+state 38
+
+    (39) identparam -> IDENT NEWLINE .
+
+    RPAREN          reduce using rule 39 (identparam -> IDENT NEWLINE .)
+    COMMA           reduce using rule 39 (identparam -> IDENT NEWLINE .)
+
+
+state 39
+
+    (9) funcDef -> DEF IDENT LPAREN paramlist RPAREN . LBRACKET stmtList RBRACKET NEWLINE
+
+    LBRACKET        shift and go to state 50
+
+
+state 40
+
+    (33) paramlist -> paramlist COMMA . param
+    (35) param -> . identparam
+    (36) param -> . strparam
+    (37) param -> . numparam
+    (38) identparam -> . IDENT
+    (39) identparam -> . IDENT NEWLINE
+    (40) identparam -> . NEWLINE IDENT
+    (41) strparam -> . STRING
+    (42) strparam -> . STRING NEWLINE
+    (43) strparam -> . NEWLINE STRING
+    (44) numparam -> . NUMBER
+    (45) numparam -> . NUMBER NEWLINE
+    (46) numparam -> . NEWLINE NUMBER
+
+    IDENT           shift and go to state 23
+    NEWLINE         shift and go to state 26
+    STRING          shift and go to state 31
+    NUMBER          shift and go to state 32
+
+    param                          shift and go to state 51
+    identparam                     shift and go to state 28
+    strparam                       shift and go to state 29
+    numparam                       shift and go to state 30
+
+state 41
+
+    (10) funcDef -> DEF IDENT LPAREN RPAREN LBRACKET . stmtList RBRACKET NEWLINE
+    (21) stmtList -> . stmtList NEWLINE stmt
+    (22) stmtList -> . stmt
+    (23) stmtList -> . stmtList stmt
+    (24) stmt -> . functionCall
+    (25) stmt -> . functionWithObj
+    (26) stmt -> . error NEWLINE
+    (27) functionCall -> . IDENT LPAREN paramlist RPAREN
+    (28) functionCall -> . IDENT LPAREN RPAREN
+    (29) functionCall -> . IDENT error NEWLINE
+    (30) functionCall -> . IDENT LPAREN error NEWLINE
+    (31) functionWithObj -> . IDENT DOT functionCall
+    (32) functionWithObj -> . IDENT DOT error NEWLINE
+
+    error           shift and go to state 57
+    IDENT           shift and go to state 52
+
+    stmtList                       shift and go to state 53
+    stmt                           shift and go to state 54
+    functionCall                   shift and go to state 55
+    functionWithObj                shift and go to state 56
+
+state 42
+
+    (40) identparam -> NEWLINE IDENT .
+
+    RPAREN          reduce using rule 40 (identparam -> NEWLINE IDENT .)
+    COMMA           reduce using rule 40 (identparam -> NEWLINE IDENT .)
+
+
+state 43
+
+    (43) strparam -> NEWLINE STRING .
+
+    RPAREN          reduce using rule 43 (strparam -> NEWLINE STRING .)
+    COMMA           reduce using rule 43 (strparam -> NEWLINE STRING .)
+
+
+state 44
+
+    (46) numparam -> NEWLINE NUMBER .
+
+    RPAREN          reduce using rule 46 (numparam -> NEWLINE NUMBER .)
+    COMMA           reduce using rule 46 (numparam -> NEWLINE NUMBER .)
+
+
+state 45
+
+    (42) strparam -> STRING NEWLINE .
+
+    RPAREN          reduce using rule 42 (strparam -> STRING NEWLINE .)
+    COMMA           reduce using rule 42 (strparam -> STRING NEWLINE .)
+
+
+state 46
+
+    (45) numparam -> NUMBER NEWLINE .
+
+    RPAREN          reduce using rule 45 (numparam -> NUMBER NEWLINE .)
+    COMMA           reduce using rule 45 (numparam -> NUMBER NEWLINE .)
+
+
+state 47
+
+    (11) prefBlock -> PREFERENCE LBRACKET sectionblocklist RBRACKET NEWLINE .
+
+    NEWLINE         reduce using rule 11 (prefBlock -> PREFERENCE LBRACKET sectionblocklist RBRACKET NEWLINE .)
+    $end            reduce using rule 11 (prefBlock -> PREFERENCE LBRACKET sectionblocklist RBRACKET NEWLINE .)
+
+
+state 48
+
+    (13) sectionblocklist -> sectionblocklist NEWLINE sectionblock .
+
+    RBRACKET        reduce using rule 13 (sectionblocklist -> sectionblocklist NEWLINE sectionblock .)
+    NEWLINE         reduce using rule 13 (sectionblocklist -> sectionblocklist NEWLINE sectionblock .)
+
+
+state 49
+
+    (14) sectionblock -> SECTION LPAREN STRING . RPAREN LBRACKET blockparamlist RBRACKET NEWLINE
+
+    RPAREN          shift and go to state 58
+
+
+state 50
+
+    (9) funcDef -> DEF IDENT LPAREN paramlist RPAREN LBRACKET . stmtList RBRACKET NEWLINE
+    (21) stmtList -> . stmtList NEWLINE stmt
+    (22) stmtList -> . stmt
+    (23) stmtList -> . stmtList stmt
+    (24) stmt -> . functionCall
+    (25) stmt -> . functionWithObj
+    (26) stmt -> . error NEWLINE
+    (27) functionCall -> . IDENT LPAREN paramlist RPAREN
+    (28) functionCall -> . IDENT LPAREN RPAREN
+    (29) functionCall -> . IDENT error NEWLINE
+    (30) functionCall -> . IDENT LPAREN error NEWLINE
+    (31) functionWithObj -> . IDENT DOT functionCall
+    (32) functionWithObj -> . IDENT DOT error NEWLINE
+
+    error           shift and go to state 57
+    IDENT           shift and go to state 52
+
+    stmtList                       shift and go to state 59
+    stmt                           shift and go to state 54
+    functionCall                   shift and go to state 55
+    functionWithObj                shift and go to state 56
+
+state 51
+
+    (33) paramlist -> paramlist COMMA param .
+
+    RPAREN          reduce using rule 33 (paramlist -> paramlist COMMA param .)
+    COMMA           reduce using rule 33 (paramlist -> paramlist COMMA param .)
+
+
+state 52
+
+    (27) functionCall -> IDENT . LPAREN paramlist RPAREN
+    (28) functionCall -> IDENT . LPAREN RPAREN
+    (29) functionCall -> IDENT . error NEWLINE
+    (30) functionCall -> IDENT . LPAREN error NEWLINE
+    (31) functionWithObj -> IDENT . DOT functionCall
+    (32) functionWithObj -> IDENT . DOT error NEWLINE
+
+    LPAREN          shift and go to state 60
+    error           shift and go to state 61
+    DOT             shift and go to state 62
+
+
+state 53
+
+    (10) funcDef -> DEF IDENT LPAREN RPAREN LBRACKET stmtList . RBRACKET NEWLINE
+    (21) stmtList -> stmtList . NEWLINE stmt
+    (23) stmtList -> stmtList . stmt
+    (24) stmt -> . functionCall
+    (25) stmt -> . functionWithObj
+    (26) stmt -> . error NEWLINE
+    (27) functionCall -> . IDENT LPAREN paramlist RPAREN
+    (28) functionCall -> . IDENT LPAREN RPAREN
+    (29) functionCall -> . IDENT error NEWLINE
+    (30) functionCall -> . IDENT LPAREN error NEWLINE
+    (31) functionWithObj -> . IDENT DOT functionCall
+    (32) functionWithObj -> . IDENT DOT error NEWLINE
+
+    RBRACKET        shift and go to state 63
+    NEWLINE         shift and go to state 64
+    error           shift and go to state 57
+    IDENT           shift and go to state 52
+
+    stmt                           shift and go to state 65
+    functionCall                   shift and go to state 55
+    functionWithObj                shift and go to state 56
+
+state 54
+
+    (22) stmtList -> stmt .
+
+    RBRACKET        reduce using rule 22 (stmtList -> stmt .)
+    NEWLINE         reduce using rule 22 (stmtList -> stmt .)
+    error           reduce using rule 22 (stmtList -> stmt .)
+    IDENT           reduce using rule 22 (stmtList -> stmt .)
+
+
+state 55
+
+    (24) stmt -> functionCall .
+
+    RBRACKET        reduce using rule 24 (stmt -> functionCall .)
+    NEWLINE         reduce using rule 24 (stmt -> functionCall .)
+    error           reduce using rule 24 (stmt -> functionCall .)
+    IDENT           reduce using rule 24 (stmt -> functionCall .)
+
+
+state 56
+
+    (25) stmt -> functionWithObj .
+
+    RBRACKET        reduce using rule 25 (stmt -> functionWithObj .)
+    NEWLINE         reduce using rule 25 (stmt -> functionWithObj .)
+    error           reduce using rule 25 (stmt -> functionWithObj .)
+    IDENT           reduce using rule 25 (stmt -> functionWithObj .)
+
+
+state 57
+
+    (26) stmt -> error . NEWLINE
+
+    NEWLINE         shift and go to state 66
+
+
+state 58
+
+    (14) sectionblock -> SECTION LPAREN STRING RPAREN . LBRACKET blockparamlist RBRACKET NEWLINE
+
+    LBRACKET        shift and go to state 67
+
+
+state 59
+
+    (9) funcDef -> DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList . RBRACKET NEWLINE
+    (21) stmtList -> stmtList . NEWLINE stmt
+    (23) stmtList -> stmtList . stmt
+    (24) stmt -> . functionCall
+    (25) stmt -> . functionWithObj
+    (26) stmt -> . error NEWLINE
+    (27) functionCall -> . IDENT LPAREN paramlist RPAREN
+    (28) functionCall -> . IDENT LPAREN RPAREN
+    (29) functionCall -> . IDENT error NEWLINE
+    (30) functionCall -> . IDENT LPAREN error NEWLINE
+    (31) functionWithObj -> . IDENT DOT functionCall
+    (32) functionWithObj -> . IDENT DOT error NEWLINE
+
+    RBRACKET        shift and go to state 68
+    NEWLINE         shift and go to state 64
+    error           shift and go to state 57
+    IDENT           shift and go to state 52
+
+    stmt                           shift and go to state 65
+    functionCall                   shift and go to state 55
+    functionWithObj                shift and go to state 56
+
+state 60
+
+    (27) functionCall -> IDENT LPAREN . paramlist RPAREN
+    (28) functionCall -> IDENT LPAREN . RPAREN
+    (30) functionCall -> IDENT LPAREN . error NEWLINE
+    (33) paramlist -> . paramlist COMMA param
+    (34) paramlist -> . param
+    (35) param -> . identparam
+    (36) param -> . strparam
+    (37) param -> . numparam
+    (38) identparam -> . IDENT
+    (39) identparam -> . IDENT NEWLINE
+    (40) identparam -> . NEWLINE IDENT
+    (41) strparam -> . STRING
+    (42) strparam -> . STRING NEWLINE
+    (43) strparam -> . NEWLINE STRING
+    (44) numparam -> . NUMBER
+    (45) numparam -> . NUMBER NEWLINE
+    (46) numparam -> . NEWLINE NUMBER
+
+    RPAREN          shift and go to state 70
+    error           shift and go to state 71
+    IDENT           shift and go to state 23
+    NEWLINE         shift and go to state 26
+    STRING          shift and go to state 31
+    NUMBER          shift and go to state 32
+
+    paramlist                      shift and go to state 69
+    param                          shift and go to state 27
+    identparam                     shift and go to state 28
+    strparam                       shift and go to state 29
+    numparam                       shift and go to state 30
+
+state 61
+
+    (29) functionCall -> IDENT error . NEWLINE
+
+    NEWLINE         shift and go to state 72
+
+
+state 62
+
+    (31) functionWithObj -> IDENT DOT . functionCall
+    (32) functionWithObj -> IDENT DOT . error NEWLINE
+    (27) functionCall -> . IDENT LPAREN paramlist RPAREN
+    (28) functionCall -> . IDENT LPAREN RPAREN
+    (29) functionCall -> . IDENT error NEWLINE
+    (30) functionCall -> . IDENT LPAREN error NEWLINE
+
+    error           shift and go to state 75
+    IDENT           shift and go to state 73
+
+    functionCall                   shift and go to state 74
+
+state 63
+
+    (10) funcDef -> DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET . NEWLINE
+
+    NEWLINE         shift and go to state 76
+
+
+state 64
+
+    (21) stmtList -> stmtList NEWLINE . stmt
+    (24) stmt -> . functionCall
+    (25) stmt -> . functionWithObj
+    (26) stmt -> . error NEWLINE
+    (27) functionCall -> . IDENT LPAREN paramlist RPAREN
+    (28) functionCall -> . IDENT LPAREN RPAREN
+    (29) functionCall -> . IDENT error NEWLINE
+    (30) functionCall -> . IDENT LPAREN error NEWLINE
+    (31) functionWithObj -> . IDENT DOT functionCall
+    (32) functionWithObj -> . IDENT DOT error NEWLINE
+
+    error           shift and go to state 57
+    IDENT           shift and go to state 52
+
+    stmt                           shift and go to state 77
+    functionCall                   shift and go to state 55
+    functionWithObj                shift and go to state 56
+
+state 65
+
+    (23) stmtList -> stmtList stmt .
+
+    RBRACKET        reduce using rule 23 (stmtList -> stmtList stmt .)
+    NEWLINE         reduce using rule 23 (stmtList -> stmtList stmt .)
+    error           reduce using rule 23 (stmtList -> stmtList stmt .)
+    IDENT           reduce using rule 23 (stmtList -> stmtList stmt .)
+
+
+state 66
+
+    (26) stmt -> error NEWLINE .
+
+    RBRACKET        reduce using rule 26 (stmt -> error NEWLINE .)
+    NEWLINE         reduce using rule 26 (stmt -> error NEWLINE .)
+    error           reduce using rule 26 (stmt -> error NEWLINE .)
+    IDENT           reduce using rule 26 (stmt -> error NEWLINE .)
+
+
+state 67
+
+    (14) sectionblock -> SECTION LPAREN STRING RPAREN LBRACKET . blockparamlist RBRACKET NEWLINE
+    (15) blockparamlist -> . blockparamlist COMMA blockparam
+    (16) blockparamlist -> . blockparam
+    (17) blockparam -> . INPUT STRING
+    (18) blockparam -> . STRING
+    (19) blockparam -> . MULTIPLE COLON BOOL
+    (20) blockparam -> . REQUIRED COLON BOOL
+
+    INPUT           shift and go to state 81
+    STRING          shift and go to state 78
+    MULTIPLE        shift and go to state 82
+    REQUIRED        shift and go to state 83
+
+    blockparamlist                 shift and go to state 79
+    blockparam                     shift and go to state 80
+
+state 68
+
+    (9) funcDef -> DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET . NEWLINE
+
+    NEWLINE         shift and go to state 84
+
+
+state 69
+
+    (27) functionCall -> IDENT LPAREN paramlist . RPAREN
+    (33) paramlist -> paramlist . COMMA param
+
+    RPAREN          shift and go to state 85
+    COMMA           shift and go to state 40
+
+
+state 70
+
+    (28) functionCall -> IDENT LPAREN RPAREN .
+
+    RBRACKET        reduce using rule 28 (functionCall -> IDENT LPAREN RPAREN .)
+    NEWLINE         reduce using rule 28 (functionCall -> IDENT LPAREN RPAREN .)
+    error           reduce using rule 28 (functionCall -> IDENT LPAREN RPAREN .)
+    IDENT           reduce using rule 28 (functionCall -> IDENT LPAREN RPAREN .)
+
+
+state 71
+
+    (30) functionCall -> IDENT LPAREN error . NEWLINE
+
+    NEWLINE         shift and go to state 86
+
+
+state 72
+
+    (29) functionCall -> IDENT error NEWLINE .
+
+    RBRACKET        reduce using rule 29 (functionCall -> IDENT error NEWLINE .)
+    NEWLINE         reduce using rule 29 (functionCall -> IDENT error NEWLINE .)
+    error           reduce using rule 29 (functionCall -> IDENT error NEWLINE .)
+    IDENT           reduce using rule 29 (functionCall -> IDENT error NEWLINE .)
+
+
+state 73
+
+    (27) functionCall -> IDENT . LPAREN paramlist RPAREN
+    (28) functionCall -> IDENT . LPAREN RPAREN
+    (29) functionCall -> IDENT . error NEWLINE
+    (30) functionCall -> IDENT . LPAREN error NEWLINE
+
+    LPAREN          shift and go to state 60
+    error           shift and go to state 61
+
+
+state 74
+
+    (31) functionWithObj -> IDENT DOT functionCall .
+
+    RBRACKET        reduce using rule 31 (functionWithObj -> IDENT DOT functionCall .)
+    NEWLINE         reduce using rule 31 (functionWithObj -> IDENT DOT functionCall .)
+    error           reduce using rule 31 (functionWithObj -> IDENT DOT functionCall .)
+    IDENT           reduce using rule 31 (functionWithObj -> IDENT DOT functionCall .)
+
+
+state 75
+
+    (32) functionWithObj -> IDENT DOT error . NEWLINE
+
+    NEWLINE         shift and go to state 87
+
+
+state 76
+
+    (10) funcDef -> DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET NEWLINE .
+
+    NEWLINE         reduce using rule 10 (funcDef -> DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET NEWLINE .)
+    $end            reduce using rule 10 (funcDef -> DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET NEWLINE .)
+
+
+state 77
+
+    (21) stmtList -> stmtList NEWLINE stmt .
+
+    RBRACKET        reduce using rule 21 (stmtList -> stmtList NEWLINE stmt .)
+    NEWLINE         reduce using rule 21 (stmtList -> stmtList NEWLINE stmt .)
+    error           reduce using rule 21 (stmtList -> stmtList NEWLINE stmt .)
+    IDENT           reduce using rule 21 (stmtList -> stmtList NEWLINE stmt .)
+
+
+state 78
+
+    (18) blockparam -> STRING .
+
+    RBRACKET        reduce using rule 18 (blockparam -> STRING .)
+    COMMA           reduce using rule 18 (blockparam -> STRING .)
+
+
+state 79
+
+    (14) sectionblock -> SECTION LPAREN STRING RPAREN LBRACKET blockparamlist . RBRACKET NEWLINE
+    (15) blockparamlist -> blockparamlist . COMMA blockparam
+
+    RBRACKET        shift and go to state 88
+    COMMA           shift and go to state 89
+
+
+state 80
+
+    (16) blockparamlist -> blockparam .
+
+    RBRACKET        reduce using rule 16 (blockparamlist -> blockparam .)
+    COMMA           reduce using rule 16 (blockparamlist -> blockparam .)
+
+
+state 81
+
+    (17) blockparam -> INPUT . STRING
+
+    STRING          shift and go to state 90
+
+
+state 82
+
+    (19) blockparam -> MULTIPLE . COLON BOOL
+
+    COLON           shift and go to state 91
+
+
+state 83
+
+    (20) blockparam -> REQUIRED . COLON BOOL
+
+    COLON           shift and go to state 92
+
+
+state 84
+
+    (9) funcDef -> DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET NEWLINE .
+
+    NEWLINE         reduce using rule 9 (funcDef -> DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET NEWLINE .)
+    $end            reduce using rule 9 (funcDef -> DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET NEWLINE .)
+
+
+state 85
+
+    (27) functionCall -> IDENT LPAREN paramlist RPAREN .
+
+    RBRACKET        reduce using rule 27 (functionCall -> IDENT LPAREN paramlist RPAREN .)
+    NEWLINE         reduce using rule 27 (functionCall -> IDENT LPAREN paramlist RPAREN .)
+    error           reduce using rule 27 (functionCall -> IDENT LPAREN paramlist RPAREN .)
+    IDENT           reduce using rule 27 (functionCall -> IDENT LPAREN paramlist RPAREN .)
+
+
+state 86
+
+    (30) functionCall -> IDENT LPAREN error NEWLINE .
+
+    RBRACKET        reduce using rule 30 (functionCall -> IDENT LPAREN error NEWLINE .)
+    NEWLINE         reduce using rule 30 (functionCall -> IDENT LPAREN error NEWLINE .)
+    error           reduce using rule 30 (functionCall -> IDENT LPAREN error NEWLINE .)
+    IDENT           reduce using rule 30 (functionCall -> IDENT LPAREN error NEWLINE .)
+
+
+state 87
+
+    (32) functionWithObj -> IDENT DOT error NEWLINE .
+
+    RBRACKET        reduce using rule 32 (functionWithObj -> IDENT DOT error NEWLINE .)
+    NEWLINE         reduce using rule 32 (functionWithObj -> IDENT DOT error NEWLINE .)
+    error           reduce using rule 32 (functionWithObj -> IDENT DOT error NEWLINE .)
+    IDENT           reduce using rule 32 (functionWithObj -> IDENT DOT error NEWLINE .)
+
+
+state 88
+
+    (14) sectionblock -> SECTION LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKET . NEWLINE
+
+    NEWLINE         shift and go to state 93
+
+
+state 89
+
+    (15) blockparamlist -> blockparamlist COMMA . blockparam
+    (17) blockparam -> . INPUT STRING
+    (18) blockparam -> . STRING
+    (19) blockparam -> . MULTIPLE COLON BOOL
+    (20) blockparam -> . REQUIRED COLON BOOL
+
+    INPUT           shift and go to state 81
+    STRING          shift and go to state 78
+    MULTIPLE        shift and go to state 82
+    REQUIRED        shift and go to state 83
+
+    blockparam                     shift and go to state 94
+
+state 90
+
+    (17) blockparam -> INPUT STRING .
+
+    RBRACKET        reduce using rule 17 (blockparam -> INPUT STRING .)
+    COMMA           reduce using rule 17 (blockparam -> INPUT STRING .)
+
+
+state 91
+
+    (19) blockparam -> MULTIPLE COLON . BOOL
+
+    BOOL            shift and go to state 95
+
+
+state 92
+
+    (20) blockparam -> REQUIRED COLON . BOOL
+
+    BOOL            shift and go to state 96
+
+
+state 93
+
+    (14) sectionblock -> SECTION LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKET NEWLINE .
+
+    RBRACKET        reduce using rule 14 (sectionblock -> SECTION LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKET NEWLINE .)
+    NEWLINE         reduce using rule 14 (sectionblock -> SECTION LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKET NEWLINE .)
+
+
+state 94
+
+    (15) blockparamlist -> blockparamlist COMMA blockparam .
+
+    RBRACKET        reduce using rule 15 (blockparamlist -> blockparamlist COMMA blockparam .)
+    COMMA           reduce using rule 15 (blockparamlist -> blockparamlist COMMA blockparam .)
+
+
+state 95
+
+    (19) blockparam -> MULTIPLE COLON BOOL .
+
+    RBRACKET        reduce using rule 19 (blockparam -> MULTIPLE COLON BOOL .)
+    COMMA           reduce using rule 19 (blockparam -> MULTIPLE COLON BOOL .)
+
+
+state 96
+
+    (20) blockparam -> REQUIRED COLON BOOL .
+
+    RBRACKET        reduce using rule 20 (blockparam -> REQUIRED COLON BOOL .)
+    COMMA           reduce using rule 20 (blockparam -> REQUIRED COLON BOOL .)
+
