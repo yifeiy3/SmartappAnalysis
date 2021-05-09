@@ -128,12 +128,10 @@ def MyLexer():
         r'[0-9]+'
         return t 
         
-    # def t_ANY_IDENT(t):
-    #     r'[a-zA-Z0-9_-]+(?)*'
-    #     return t 
     def t_ANY_IDENT(t):
         r'([a-zA-Z0-9_-]+(\?)*)'
-        return t 
+        t.value = t.value.replace('?', '')
+        return t
 
     def t_ANY_NEWLINE(t):
         r'\n(\n|\s)*'
@@ -239,6 +237,7 @@ if __name__ == '__main__':
                 log.debug "ok. $it.name, $it.values"
             }
         }'''
+    data = '''switches?'''
     lexer = MyLexer()
     lexer.input(data)
     while True:
