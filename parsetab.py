@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'BOOL COLON COMMA COMMENT DEF DEFINITION DOT EQUAL IDENT INPUT LBRACKET LONGCOMMENT LPAREN MAPPING MATH MULTIPLE NEWLINE NUMBER PREFERENCE RBRACKET REQUIRED RPAREN SECTION STRING\n        program : program NEWLINE funcDef\n                | funcDef\n    \n        program : program NEWLINE prefBlock\n                | prefBlock\n                | notNeededBlock\n                | program NEWLINE notNeededBlock\n    \n        notNeededBlock : DEFINITION LPAREN error RPAREN\n                       | MAPPING LBRACKET error RBRACKET\n    funcDef : DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET\n            | DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET\n    prefBlock : PREFERENCE LBRACKET sectionblocklist RBRACKETsectionblocklist : sectionblock\n            | sectionblocklist NEWLINE sectionblocksectionblock : SECTION LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKETblockparamlist : blockparamlist COMMA blockparam\n            | blockparamblockparam : INPUT STRING\n                | STRING\n                | MULTIPLE COLON BOOL\n                | REQUIRED COLON BOOLstmtList : stmtList NEWLINE stmt\n            | stmt \n            | stmtList stmtstmt : functionCall\n         | functionWithObjstmt : error NEWLINEfunctionCall : IDENT LPAREN paramlist RPAREN\n                | IDENT LPAREN RPARENfunctionCall : IDENT LPAREN error NEWLINEfunctionWithObj : IDENT DOT functionCallfunctionWithObj : IDENT DOT error NEWLINEparamlist : paramlist COMMA param\n                | paramparam : identparam\n            | strparam\n            | numparam identparam : IDENT\n                | IDENT NEWLINE\n                | NEWLINE IDENTstrparam : STRING\n            | STRING NEWLINE\n            | NEWLINE STRINGnumparam : NUMBER\n            | NUMBER NEWLINE\n            | NEWLINE NUMBER'
+_lr_signature = 'ARRAY BOOL COLON COMMA COMMENT DEF DEFINITION DOT EQUAL IDENT ILBRACKET INPUT IRBRACKET LBRACKET LONGCOMMENT LPAREN MAPPING MATH MULTIPLE NEWLINE NUMBER PREFERENCE RBRACKET REQUIRED RPAREN SECTION STRING TITLE\n        program : program funcDef\n                | funcDef\n    \n        program : program prefBlock\n                | prefBlock\n                | notNeededBlock\n                | program notNeededBlock\n    \n        notNeededBlock : DEFINITION LPAREN error RPAREN\n                       | MAPPING LBRACKET error RBRACKET\n    funcDef : DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET\n            | DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET\n    prefBlock : PREFERENCE LBRACKET sectionblocklist RBRACKETsectionblocklist : sectionblock\n            | sectionblocklist NEWLINE sectionblock\n            | sectionblocklist NEWLINEsectionblock : SECTION LPAREN STRING RPAREN ILBRACKET blockparamlist IRBRACKETblockparamlist : blockparamlist COMMA blockparam\n            | blockparamblockparam : INPUT STRING\n                | STRING\n                | TITLE COLON STRING\n                | MULTIPLE COLON BOOL\n                | REQUIRED COLON BOOLstmtList : stmtList NEWLINEstmtList : stmtList NEWLINE stmt\n            | stmt \n            | stmtList stmtstmt : functionCall\n         | functionWithObjstmt : error NEWLINEfunctionCall : IDENT LPAREN paramlist RPAREN\n                | IDENT LPAREN RPARENfunctionCall : IDENT LPAREN error NEWLINE\n                  | IDENT error NEWLINEfunctionWithObj : IDENT DOT functionCallfunctionWithObj : IDENT DOT error NEWLINEparamlist : paramlist COMMA param\n                | paramparam : identparam\n            | strparam\n            | numparam identparam : IDENT\n                | IDENT NEWLINE\n                | NEWLINE IDENTstrparam : STRING\n            | STRING NEWLINE\n            | NEWLINE STRINGnumparam : NUMBER\n            | NUMBER NEWLINE\n            | NEWLINE NUMBER'
     
-_lr_action_items = {'DEF':([0,9,],[5,5,]),'PREFERENCE':([0,9,],[6,6,]),'DEFINITION':([0,9,],[7,7,]),'MAPPING':([0,9,],[8,8,]),'$end':([1,2,3,4,14,15,16,33,36,37,61,66,],[0,-2,-4,-5,-1,-3,-6,-11,-7,-8,-10,-9,]),'NEWLINE':([1,2,3,4,14,15,16,17,18,19,23,31,32,33,36,37,40,47,52,53,54,55,56,58,59,61,63,64,66,68,69,71,72,73,80,81,82,83,],[9,-2,-4,-5,-1,-3,-6,30,34,-12,38,45,46,-11,-7,-8,30,-13,62,-22,-24,-25,64,62,30,-10,-23,-26,-9,-28,81,-30,82,-21,-27,-29,-31,-14,]),'IDENT':([5,17,30,40,41,49,52,53,54,55,58,59,60,62,63,64,68,71,73,80,81,82,],[10,23,42,23,51,51,51,-22,-24,-25,51,23,70,51,-23,-26,-28,-30,-21,-27,-29,-31,]),'LBRACKET':([6,8,25,39,57,],[11,13,41,49,65,]),'LPAREN':([7,10,20,51,70,],[12,17,35,59,59,]),'SECTION':([11,34,],[20,20,]),'error':([12,13,41,49,52,53,54,55,58,59,60,62,63,64,68,71,73,80,81,82,],[21,22,56,56,56,-22,-24,-25,56,69,72,56,-23,-26,-28,-30,-21,-27,-29,-31,]),'RPAREN':([17,21,23,24,26,27,28,29,31,32,38,42,43,44,45,46,48,50,59,67,],[25,36,-37,39,-33,-34,-35,-36,-40,-43,-38,-39,-42,-45,-41,-44,57,-32,68,80,]),'STRING':([17,30,35,40,59,65,77,84,],[31,43,48,31,31,74,85,74,]),'NUMBER':([17,30,40,59,],[32,44,32,32,]),'RBRACKET':([18,19,22,47,52,53,54,55,58,63,64,68,71,73,74,75,76,80,81,82,83,85,88,89,90,],[33,-12,37,-13,61,-22,-24,-25,66,-23,-26,-28,-30,-21,-18,83,-16,-27,-29,-31,-14,-17,-15,-19,-20,]),'COMMA':([23,24,26,27,28,29,31,32,38,42,43,44,45,46,50,67,74,75,76,85,88,89,90,],[-37,40,-33,-34,-35,-36,-40,-43,-38,-39,-42,-45,-41,-44,-32,40,-18,84,-16,-17,-15,-19,-20,]),'DOT':([51,],[60,]),'INPUT':([65,84,],[77,77,]),'MULTIPLE':([65,84,],[78,78,]),'REQUIRED':([65,84,],[79,79,]),'COLON':([78,79,],[86,87,]),'BOOL':([86,87,],[89,90,]),}
+_lr_action_items = {'DEF':([0,1,2,3,4,9,10,11,32,35,36,61,66,],[5,5,-2,-4,-5,-1,-3,-6,-11,-7,-8,-10,-9,]),'PREFERENCE':([0,1,2,3,4,9,10,11,32,35,36,61,66,],[6,6,-2,-4,-5,-1,-3,-6,-11,-7,-8,-10,-9,]),'DEFINITION':([0,1,2,3,4,9,10,11,32,35,36,61,66,],[7,7,-2,-4,-5,-1,-3,-6,-11,-7,-8,-10,-9,]),'MAPPING':([0,1,2,3,4,9,10,11,32,35,36,61,66,],[8,8,-2,-4,-5,-1,-3,-6,-11,-7,-8,-10,-9,]),'$end':([1,2,3,4,9,10,11,32,35,36,61,66,],[0,-2,-4,-5,-1,-3,-6,-11,-7,-8,-10,-9,]),'IDENT':([5,16,29,39,40,48,51,52,53,54,57,58,60,62,63,64,68,70,72,74,82,83,84,],[12,22,41,22,50,50,50,-25,-27,-28,50,22,71,50,-26,-29,-31,-33,-34,-24,-30,-32,-35,]),'LBRACKET':([6,8,24,38,],[13,15,40,48,]),'LPAREN':([7,12,19,50,71,],[14,16,34,58,58,]),'SECTION':([13,33,],[19,19,]),'error':([14,15,40,48,50,51,52,53,54,57,58,60,62,63,64,68,70,71,72,74,82,83,84,],[20,21,55,55,59,55,-25,-27,-28,55,69,73,55,-26,-29,-31,-33,59,-34,-24,-30,-32,-35,]),'RPAREN':([16,20,22,23,25,26,27,28,30,31,37,41,42,43,44,45,47,49,58,67,],[24,35,-41,38,-37,-38,-39,-40,-44,-47,-42,-43,-46,-49,-45,-48,56,-36,68,82,]),'NEWLINE':([16,17,18,22,30,31,33,39,46,51,52,53,54,55,57,58,59,62,63,64,68,69,70,72,73,74,82,83,84,85,],[29,33,-12,37,44,45,-14,29,-13,62,-25,-27,-28,64,62,29,70,-23,-26,-29,-31,83,-33,-34,84,-24,-30,-32,-35,-15,]),'STRING':([16,29,34,39,58,65,78,86,88,],[30,42,47,30,30,75,87,75,92,]),'NUMBER':([16,29,39,58,],[31,43,31,31,]),'RBRACKET':([17,18,21,33,46,51,52,53,54,57,62,63,64,68,70,72,74,82,83,84,85,],[32,-12,36,-14,-13,61,-25,-27,-28,66,-23,-26,-29,-31,-33,-34,-24,-30,-32,-35,-15,]),'COMMA':([22,23,25,26,27,28,30,31,37,41,42,43,44,45,49,67,75,76,77,87,91,92,93,94,],[-41,39,-37,-38,-39,-40,-44,-47,-42,-43,-46,-49,-45,-48,-36,39,-19,86,-17,-18,-16,-20,-21,-22,]),'DOT':([50,],[60,]),'ILBRACKET':([56,],[65,]),'INPUT':([65,86,],[78,78,]),'TITLE':([65,86,],[79,79,]),'MULTIPLE':([65,86,],[80,80,]),'REQUIRED':([65,86,],[81,81,]),'IRBRACKET':([75,76,77,87,91,92,93,94,],[-19,85,-17,-18,-16,-20,-21,-22,]),'COLON':([79,80,81,],[88,89,90,]),'BOOL':([89,90,],[93,94,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'funcDef':([0,9,],[2,14,]),'prefBlock':([0,9,],[3,15,]),'notNeededBlock':([0,9,],[4,16,]),'sectionblocklist':([11,],[18,]),'sectionblock':([11,34,],[19,47,]),'paramlist':([17,59,],[24,67,]),'param':([17,40,59,],[26,50,26,]),'identparam':([17,40,59,],[27,27,27,]),'strparam':([17,40,59,],[28,28,28,]),'numparam':([17,40,59,],[29,29,29,]),'stmtList':([41,49,],[52,58,]),'stmt':([41,49,52,58,62,],[53,53,63,63,73,]),'functionCall':([41,49,52,58,60,62,],[54,54,54,54,71,54,]),'functionWithObj':([41,49,52,58,62,],[55,55,55,55,55,]),'blockparamlist':([65,],[75,]),'blockparam':([65,84,],[76,88,]),}
+_lr_goto_items = {'program':([0,],[1,]),'funcDef':([0,1,],[2,9,]),'prefBlock':([0,1,],[3,10,]),'notNeededBlock':([0,1,],[4,11,]),'sectionblocklist':([13,],[17,]),'sectionblock':([13,33,],[18,46,]),'paramlist':([16,58,],[23,67,]),'param':([16,39,58,],[25,49,25,]),'identparam':([16,39,58,],[26,26,26,]),'strparam':([16,39,58,],[27,27,27,]),'numparam':([16,39,58,],[28,28,28,]),'stmtList':([40,48,],[51,57,]),'stmt':([40,48,51,57,62,],[52,52,63,63,74,]),'functionCall':([40,48,51,57,60,62,],[53,53,53,53,72,53,]),'functionWithObj':([40,48,51,57,62,],[54,54,54,54,54,]),'blockparamlist':([65,],[76,]),'blockparam':([65,86,],[77,91,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,49 +27,53 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> program NEWLINE funcDef','program',3,'p_program_funcDef','parsefile.py',7),
-  ('program -> funcDef','program',1,'p_program_funcDef','parsefile.py',8),
-  ('program -> program NEWLINE prefBlock','program',3,'p_program_block','parsefile.py',18),
-  ('program -> prefBlock','program',1,'p_program_block','parsefile.py',19),
-  ('program -> notNeededBlock','program',1,'p_program_block','parsefile.py',20),
-  ('program -> program NEWLINE notNeededBlock','program',3,'p_program_block','parsefile.py',21),
-  ('notNeededBlock -> DEFINITION LPAREN error RPAREN','notNeededBlock',4,'p_notNeededBlock','parsefile.py',31),
-  ('notNeededBlock -> MAPPING LBRACKET error RBRACKET','notNeededBlock',4,'p_notNeededBlock','parsefile.py',32),
-  ('funcDef -> DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET','funcDef',8,'p_funcDef','parsefile.py',37),
-  ('funcDef -> DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET','funcDef',7,'p_funcDef','parsefile.py',38),
-  ('prefBlock -> PREFERENCE LBRACKET sectionblocklist RBRACKET','prefBlock',4,'p_prefBlock','parsefile.py',46),
-  ('sectionblocklist -> sectionblock','sectionblocklist',1,'p_sectionblocklist','parsefile.py',50),
-  ('sectionblocklist -> sectionblocklist NEWLINE sectionblock','sectionblocklist',3,'p_sectionblocklist','parsefile.py',51),
-  ('sectionblock -> SECTION LPAREN STRING RPAREN LBRACKET blockparamlist RBRACKET','sectionblock',7,'p_sectionblock','parsefile.py',59),
-  ('blockparamlist -> blockparamlist COMMA blockparam','blockparamlist',3,'p_blockparamlist','parsefile.py',63),
-  ('blockparamlist -> blockparam','blockparamlist',1,'p_blockparamlist','parsefile.py',64),
-  ('blockparam -> INPUT STRING','blockparam',2,'p_blockparam','parsefile.py',72),
-  ('blockparam -> STRING','blockparam',1,'p_blockparam','parsefile.py',73),
-  ('blockparam -> MULTIPLE COLON BOOL','blockparam',3,'p_blockparam','parsefile.py',74),
-  ('blockparam -> REQUIRED COLON BOOL','blockparam',3,'p_blockparam','parsefile.py',75),
-  ('stmtList -> stmtList NEWLINE stmt','stmtList',3,'p_stmtList','parsefile.py',86),
-  ('stmtList -> stmt','stmtList',1,'p_stmtList','parsefile.py',87),
-  ('stmtList -> stmtList stmt','stmtList',2,'p_stmtList','parsefile.py',88),
-  ('stmt -> functionCall','stmt',1,'p_stmt','parsefile.py',106),
-  ('stmt -> functionWithObj','stmt',1,'p_stmt','parsefile.py',107),
-  ('stmt -> error NEWLINE','stmt',2,'p_stmt_error','parsefile.py',111),
-  ('functionCall -> IDENT LPAREN paramlist RPAREN','functionCall',4,'p_functionCall','parsefile.py',116),
-  ('functionCall -> IDENT LPAREN RPAREN','functionCall',3,'p_functionCall','parsefile.py',117),
-  ('functionCall -> IDENT LPAREN error NEWLINE','functionCall',4,'p_functionCall_error','parsefile.py',124),
-  ('functionWithObj -> IDENT DOT functionCall','functionWithObj',3,'p_functionWithObj','parsefile.py',129),
-  ('functionWithObj -> IDENT DOT error NEWLINE','functionWithObj',4,'p_functionWithObj_error','parsefile.py',133),
-  ('paramlist -> paramlist COMMA param','paramlist',3,'p_paramlist','parsefile.py',138),
-  ('paramlist -> param','paramlist',1,'p_paramlist','parsefile.py',139),
-  ('param -> identparam','param',1,'p_param','parsefile.py',147),
-  ('param -> strparam','param',1,'p_param','parsefile.py',148),
-  ('param -> numparam','param',1,'p_param','parsefile.py',149),
-  ('identparam -> IDENT','identparam',1,'p_identparam','parsefile.py',153),
-  ('identparam -> IDENT NEWLINE','identparam',2,'p_identparam','parsefile.py',154),
-  ('identparam -> NEWLINE IDENT','identparam',2,'p_identparam','parsefile.py',155),
-  ('strparam -> STRING','strparam',1,'p_strparam','parsefile.py',162),
-  ('strparam -> STRING NEWLINE','strparam',2,'p_strparam','parsefile.py',163),
-  ('strparam -> NEWLINE STRING','strparam',2,'p_strparam','parsefile.py',164),
-  ('numparam -> NUMBER','numparam',1,'p_numparam','parsefile.py',171),
-  ('numparam -> NUMBER NEWLINE','numparam',2,'p_numparam','parsefile.py',172),
-  ('numparam -> NEWLINE NUMBER','numparam',2,'p_numparam','parsefile.py',173),
+  ('program -> program funcDef','program',2,'p_program_funcDef','parsefile.py',8),
+  ('program -> funcDef','program',1,'p_program_funcDef','parsefile.py',9),
+  ('program -> program prefBlock','program',2,'p_program_block','parsefile.py',22),
+  ('program -> prefBlock','program',1,'p_program_block','parsefile.py',23),
+  ('program -> notNeededBlock','program',1,'p_program_block','parsefile.py',24),
+  ('program -> program notNeededBlock','program',2,'p_program_block','parsefile.py',25),
+  ('notNeededBlock -> DEFINITION LPAREN error RPAREN','notNeededBlock',4,'p_notNeededBlock','parsefile.py',38),
+  ('notNeededBlock -> MAPPING LBRACKET error RBRACKET','notNeededBlock',4,'p_notNeededBlock','parsefile.py',39),
+  ('funcDef -> DEF IDENT LPAREN paramlist RPAREN LBRACKET stmtList RBRACKET','funcDef',8,'p_funcDef','parsefile.py',44),
+  ('funcDef -> DEF IDENT LPAREN RPAREN LBRACKET stmtList RBRACKET','funcDef',7,'p_funcDef','parsefile.py',45),
+  ('prefBlock -> PREFERENCE LBRACKET sectionblocklist RBRACKET','prefBlock',4,'p_prefBlock','parsefile.py',53),
+  ('sectionblocklist -> sectionblock','sectionblocklist',1,'p_sectionblocklist','parsefile.py',57),
+  ('sectionblocklist -> sectionblocklist NEWLINE sectionblock','sectionblocklist',3,'p_sectionblocklist','parsefile.py',58),
+  ('sectionblocklist -> sectionblocklist NEWLINE','sectionblocklist',2,'p_sectionblocklist','parsefile.py',59),
+  ('sectionblock -> SECTION LPAREN STRING RPAREN ILBRACKET blockparamlist IRBRACKET','sectionblock',7,'p_sectionblock','parsefile.py',69),
+  ('blockparamlist -> blockparamlist COMMA blockparam','blockparamlist',3,'p_blockparamlist','parsefile.py',73),
+  ('blockparamlist -> blockparam','blockparamlist',1,'p_blockparamlist','parsefile.py',74),
+  ('blockparam -> INPUT STRING','blockparam',2,'p_blockparam','parsefile.py',82),
+  ('blockparam -> STRING','blockparam',1,'p_blockparam','parsefile.py',83),
+  ('blockparam -> TITLE COLON STRING','blockparam',3,'p_blockparam','parsefile.py',84),
+  ('blockparam -> MULTIPLE COLON BOOL','blockparam',3,'p_blockparam','parsefile.py',85),
+  ('blockparam -> REQUIRED COLON BOOL','blockparam',3,'p_blockparam','parsefile.py',86),
+  ('stmtList -> stmtList NEWLINE','stmtList',2,'p_stmtList_withNewline','parsefile.py',99),
+  ('stmtList -> stmtList NEWLINE stmt','stmtList',3,'p_stmtList','parsefile.py',103),
+  ('stmtList -> stmt','stmtList',1,'p_stmtList','parsefile.py',104),
+  ('stmtList -> stmtList stmt','stmtList',2,'p_stmtList','parsefile.py',105),
+  ('stmt -> functionCall','stmt',1,'p_stmt','parsefile.py',123),
+  ('stmt -> functionWithObj','stmt',1,'p_stmt','parsefile.py',124),
+  ('stmt -> error NEWLINE','stmt',2,'p_stmt_error','parsefile.py',128),
+  ('functionCall -> IDENT LPAREN paramlist RPAREN','functionCall',4,'p_functionCall','parsefile.py',133),
+  ('functionCall -> IDENT LPAREN RPAREN','functionCall',3,'p_functionCall','parsefile.py',134),
+  ('functionCall -> IDENT LPAREN error NEWLINE','functionCall',4,'p_functionCall_error','parsefile.py',141),
+  ('functionCall -> IDENT error NEWLINE','functionCall',3,'p_functionCall_error','parsefile.py',142),
+  ('functionWithObj -> IDENT DOT functionCall','functionWithObj',3,'p_functionWithObj','parsefile.py',147),
+  ('functionWithObj -> IDENT DOT error NEWLINE','functionWithObj',4,'p_functionWithObj_error','parsefile.py',154),
+  ('paramlist -> paramlist COMMA param','paramlist',3,'p_paramlist','parsefile.py',159),
+  ('paramlist -> param','paramlist',1,'p_paramlist','parsefile.py',160),
+  ('param -> identparam','param',1,'p_param','parsefile.py',168),
+  ('param -> strparam','param',1,'p_param','parsefile.py',169),
+  ('param -> numparam','param',1,'p_param','parsefile.py',170),
+  ('identparam -> IDENT','identparam',1,'p_identparam','parsefile.py',174),
+  ('identparam -> IDENT NEWLINE','identparam',2,'p_identparam','parsefile.py',175),
+  ('identparam -> NEWLINE IDENT','identparam',2,'p_identparam','parsefile.py',176),
+  ('strparam -> STRING','strparam',1,'p_strparam','parsefile.py',183),
+  ('strparam -> STRING NEWLINE','strparam',2,'p_strparam','parsefile.py',184),
+  ('strparam -> NEWLINE STRING','strparam',2,'p_strparam','parsefile.py',185),
+  ('numparam -> NUMBER','numparam',1,'p_numparam','parsefile.py',192),
+  ('numparam -> NUMBER NEWLINE','numparam',2,'p_numparam','parsefile.py',193),
+  ('numparam -> NEWLINE NUMBER','numparam',2,'p_numparam','parsefile.py',194),
 ]
