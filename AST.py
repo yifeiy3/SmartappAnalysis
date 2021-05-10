@@ -143,10 +143,10 @@ def parseAST(ast):
 
     print("functions after postProcessing: {0}".format(functions))
     relationDict = constructRelations(subscribes, functions)
-    #Installs is a function every smartapp needs to call when executing anything.
+    #Installed is a function every smartapp needs to call when executing anything.
     #thus sideEffectDeviceChange records any other sideEffects our app may do not due to subscribed device changes.
     sideEffectDeviceChange, _fnCall = functions['installed'] 
     print("final relation dict is: {0}".format(relationDict))
 
-    return relationDict, sideEffectDeviceChange
+    return relationDict, list(set(sideEffectDeviceChange))
     
