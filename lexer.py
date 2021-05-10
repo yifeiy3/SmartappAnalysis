@@ -122,6 +122,7 @@ def MyLexer():
 
     def t_ANY_STRING(t):
         r'((\')([a-zA-Z0-9_,\.-\\\'\s!#$%^&\*\(\)]*)(\'))|((\")([a-zA-Z0-9_,\.-\\\'\s!#$%^&\*\(\)]*)(\"))'
+        t.value = t.value.replace('\'', '').replace('\"', '') 
         return t 
 
     def t_ANY_NUMBER(t):
