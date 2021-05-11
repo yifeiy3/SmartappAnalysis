@@ -1,0 +1,40 @@
+Device: Virtual Switch 1, State: off:
+Can be reached through: 
+	 Initial Device: Virtual Switch 1, Initial State: off, Through path: 
+		: []
+
+
+Device: Virtual Switch 1, State: on:
+Can be reached through: 
+	 Initial Device: Virtual Switch 1, Initial State: off, Through path: 
+		: ['Smartapps/Circular/turnoff.groovy', 'Smartapps/Circular/simplecircular.groovy', 'Smartapps/Circular/turnon.groovy']
+	 Initial Device: Virtual Switch 3, Initial State: off, Through path: 
+		: ['Smartapps/Circular/simplecircular.groovy', 'Smartapps/Circular/turnon.groovy']
+	 Initial Device: Virtual Switch 2, Initial State: off, Through path: 
+		: ['Smartapps/Circular/turnon.groovy']
+	 Initial Device: None, Initial State: sideEffect, Through path: 
+		: ['Smartapps/Circular/turnoff.groovy']
+
+
+Device: Virtual Switch 3, State: off:
+Can be reached through: 
+	 Initial Device: Virtual Switch 1, Initial State: off, Through path: 
+		: ['Smartapps/Circular/turnoff.groovy']
+	 Initial Device: Virtual Switch 3, Initial State: off, Through path: 
+		: []
+	 Initial Device: None, Initial State: sideEffect, Through path: 
+		: ['Smartapps/Circular/turnoff.groovy']
+
+
+Device: Virtual Switch 2, State: off:
+Can be reached through: 
+	 Initial Device: Virtual Switch 1, Initial State: off, Through path: 
+		: ['Smartapps/Circular/turnoff.groovy', 'Smartapps/Circular/simplecircular.groovy']
+	 Initial Device: Virtual Switch 3, Initial State: off, Through path: 
+		: ['Smartapps/Circular/simplecircular.groovy']
+	 Initial Device: Virtual Switch 2, Initial State: off, Through path: 
+		: []
+	 Initial Device: None, Initial State: sideEffect, Through path: 
+		: ['Smartapps/Circular/turnoff.groovy', 'Smartapps/Circular/simplecircular.groovy']
+
+

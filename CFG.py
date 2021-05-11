@@ -26,6 +26,8 @@ class CFG():
                 for devices in deviceDict[smartapps][inputs]:
                     deviceSet.add(devices)
 
+        deviceSet.add("None") #add a none node for statechanges due to sideEffect, which we dont need any device
+
         #give each device a node corresponding to it
         return {device : deviceNode(device) for device in deviceSet}
     
@@ -34,16 +36,6 @@ class CFG():
             param[1]'s state change to param[4] causes param[2]'s state change to param[5],
             via smartapp with name param[3]
         '''
-        def appendOrCreate(d, key1, key2, value):
-            if key1 not in d.keys():
-                d[key1] = {}
-                d[key1][key2] = [value] 
-            else:
-                if key2 not in d[key1].keys():
-                    d[key1][key2] = [value] 
-                else:
-                    d[key1][key2].append(value)
-    
         outDeviceNode = self.graph[deviceNameFrom]
 
         #{currentState : {deviceNameTo: [(smartappName, changedState)]}}
@@ -72,7 +64,7 @@ class CFG():
             outDevice, outState, currentPath = startingStack.pop(0)
             if visited[outDevice][outState]:
                 continue 
-            addOrCreate(relationships, outDevice, outState, currentPath)
+            appendOrCreate(relationships, outDevice, outState, currentPath)
             visited[outDevice][outState] = True 
 
             outNeigh = self.graph[outDevice].outNeighbors
@@ -100,6 +92,35 @@ class CFG():
                 rela = self.findSingleRelationship(devices, outStates)
                 addOrCreate(deviceRelationshipDict, devices, outStates, rela)
         return deviceRelationshipDict
+    
+    def invertRelationships(self):
+        '''
+            instead of finding which device state each device can reach with smartapps,
+            it would be more interesting to see for a device and state, it can be reached by what devices
+        '''
+        def dictHelper(d, key1, key2, device, state, path):
+            if key1 in d.keys():
+                if key2 in d[key1].keys():
+                    appendOrCreate(d[key1][key2], device, state, path)
+                else:
+                    d[key1][key2] = {}
+                    appendOrCreate(d[key1][key2], device, state, path)
+            else:
+                d[key1] = {}
+                d[key1][key2] = {}
+                appendOrCreate(d[key1][key2], device, state, path)
+
+        deviceRelationshipDict = self.findRelationships()
+        invertedRelationDict = {}
+        for devices in deviceRelationshipDict.keys():
+            for posStates in deviceRelationshipDict[devices].keys():
+                for reachableDevice in deviceRelationshipDict[devices][posStates].keys():
+                    for reachableDeviceStates in deviceRelationshipDict[devices][posStates][reachableDevice].keys():
+                        for path in deviceRelationshipDict[devices][posStates][reachableDevice][reachableDeviceStates]:
+                            dictHelper(invertedRelationDict, reachableDevice, reachableDeviceStates, devices, posStates, path)
+
+        return invertedRelationDict
+
 
     def printCFG(self):
         print('Printed CFG:')
@@ -114,13 +135,24 @@ def addOrCreate(d, key1, key2, value):
         d[key1] = {}
         d[key1][key2] = value 
 
-def buildCFG(relationDict, deviceDict):
+def appendOrCreate(d, key1, key2, value):
+    if key1 not in d.keys():
+        d[key1] = {}
+        d[key1][key2] = [value] 
+    else:
+        if key2 not in d[key1].keys():
+            d[key1][key2] = [value] 
+        else:
+            d[key1][key2].append(value)
+
+def buildCFG(relationDict, deviceDict, sideEffectDict):
     '''
         This function builds a relationship graph between Samsung Smartapps
         that we have constructed AST with static analysis
 
         @param: relationship dictionary of smartapps we got from AST
         @param: devices each smartapp subscribe to in the environment
+        @param: the sideeffect each smartapp may bring to change device states
     '''
     cfg = CFG(deviceDict)
 
@@ -135,6 +167,12 @@ def buildCFG(relationDict, deviceDict):
                     for deviceNameFrom in deviceNamesFrom:
                         for deviceNameTo in deviceNamesTo:
                             cfg.addEdge(deviceNameFrom, deviceNameTo, smartapps, currentState, changedState)
+        
+    for smartapp in sideEffectDict.keys():
+        for device, cstate in sideEffectDict[smartapp]:
+            actualDevice = deviceDict[smartapp][device]
+            for eachD in actualDevice:
+                cfg.addEdge("None", eachD, smartapp, 'sideEffect', cstate)
     
     cfg.printCFG()
     return cfg 
