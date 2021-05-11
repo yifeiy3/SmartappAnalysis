@@ -15,13 +15,18 @@ parser = MyParser()
 parser.build(log)
 
 # Example A
-codefiles = ['Smartapps/turnon.groovy', 'Smartapps/turnoff.groovy']
+codefiles = ['Smartapps/Circular/turnon.groovy', 'Smartapps/Circular/turnoff.groovy', 'Smartapps/Circular/simplecircular.groovy']
 #devices each smartapp subscribed to in the environment
-turnoffDict = {'switches': ["Virtual Switch 1"], "switchesoff": ["Virtual Switch 2"]}
+turnoffDict = {'switches': ["Virtual Switch 1"], "switchesoff": ["Virtual Switch 3"]}
 turnonDict = {'switches': ["Virtual Switch 2"], "switcheson": ["Virtual Switch 1"]}
-environmentDict = {'Smartapps/turnon.groovy' : turnonDict, 'Smartapps/turnoff.groovy': turnoffDict}
+simplecircularDict = {'switches': ["Virtual Switch 3"], "switchesoff": ["Virtual Switch 2"]}
+environmentDict = \
+    {'Smartapps/Circular/turnon.groovy' : turnonDict, 
+    'Smartapps/Circular/turnoff.groovy': turnoffDict, 
+    'Smartapps/Circular/simplecircular.groovy': simplecircularDict}
 
 smartappDict = {}
+sideEffectDict = {}
 
 for smartapp in codefiles:
     s = ''
@@ -31,7 +36,9 @@ for smartapp in codefiles:
     result = parser.parseFile(s)
 
     parsedrelations, parsedSideEffects = parseAST(result)
-    smartappDict[smartapp] = (parsedrelations, parsedSideEffects)
+    smartappDict[smartapp] = parsedrelations
+    sideEffectDict[smartapp] = parsedSideEffects
 
 print("received dictionary from AST: {0}".format(smartappDict))
-buildCFG(smartappDict, environmentDict)
+cfg = buildCFG(smartappDict, environmentDict)
+print("found relationships: {0}".format(cfg.findRelationships()))

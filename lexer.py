@@ -115,13 +115,9 @@ def MyLexer():
     def t_ANY_EQUAL(t):
         r'='
         return t
-    
-    def t_ANY_MATH(t):
-        r'\+|\-|\*|\/|<<|>>|!|\~'
-        return t
 
     def t_ANY_STRING(t):
-        r'((\')([a-zA-Z0-9_,\.-\\\'\s!#$%^&\*\(\)]*)(\'))|((\")([a-zA-Z0-9_,\.-\\\'\s!#$%^&\*\(\)]*)(\"))'
+        r'((\')([a-zA-Z0-9_,\{\}\.\?\-\/\\\'\s!#$%\^:&\@\*\(\)]*)(\'))|((\")([a-zA-Z0-9:_,\{\}\/\.\-\\\?\'\s!#$%\^&\@\*\(\)]*)(\"))'
         t.value = t.value.replace('\'', '').replace('\"', '') 
         return t 
 
@@ -149,6 +145,10 @@ def MyLexer():
         r'(\/\*)(.|\n)+(\*\/)'
         pass 
 
+    def t_ANY_MATH(t):
+        r'\+|\-|\*|\/|<<|>>|!|\~'
+        return t
+
     def t_ANY_error(t):
         print("Illegal character {0}".format(t.value[0]))
         t.lexer.skip(1)
@@ -163,82 +163,50 @@ if __name__ == '__main__':
     #         subscribe(app, timedTouch)
     #     }'''
     data = '''
-        preferences {
-            section("Turn on...") {
-                input "switches", "capability.switch", multiple: true
-            }
-            section("When I touch the app, turn off..."){
-                input "switchesoff", "capability.switch", multiple: true
-            }
-            section("When I touch the app, be active after..."){
-                input "timer", "number", required: true, title: "seconds?"
-            }
-            section("Monitor the app using..."){
-                input "monitor", "capability.execute", required:false
-            }
-        }
+            definition(
+                name: "17355Project1",
+                namespace: "yifeiy3",
+                author: "Eric Yang",
+                description: "Turn off both lights",
+                category: "",
+                iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
+                iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
+                iconX3Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png")
 
-        mappings {
-            path("/endpoint") {
-                action: [
-                    GET: "handlerURL"
-                ]
+
+            preferences {
+                section("Turn off this switch") {
+                    input "switchesoff", "capability.switch", required: true
+                }
+                section("When this switch is off") {
+                    input "switches", "capability.switch", required: true
+                }
+                section("Switch for reference") {
+                    input "switchesref", "capability.switch", required: true
+                }
             }
-        }
-        def handlerURL()
-        {
-            log.debug("this is called")
-        }
 
-        def installed()
-        {
-            subscribe(switches, "switch.off", offhandler)
-            subscribe(location, changedLocationMode)
-            subscribe(app, timedTouch)
-        }
+            def installed() {
+                log.debug "Installed with settings: $settings"
 
-        def updated()
-        {
-            unsubscribe()
-            subscribe(switches, "switch.off", offhandler)
-            subscribe(location, changedLocationMode)
-            subscribe(app, timedTouch)
-        }
-
-        def offhandler(evt){
-            log.debug "$switches wtf"
-            monitor?.execute("AppName: Big Turn ON, ($switches switch : on)")
-            location.setMode("Away")
-            switches?.off()
-        }
-
-        def changedLocationMode(evt) {
-            log.debug "changedLocationMode: $evt"
-            switches?.on()
-            switchesoff?.off()
-        }
-
-        def timedTouch(evt){
-            log.debug "a timed modification of this app"
-            runIn(timer, appTouch)
-        }
-
-        def appTouch(evt) {
-            log.debug "appTouch: $evt, $switches"
-            monitor?.execute("AppName: Big Turn ON, ($switches switch : on, $switchesoff switch : off)")
-            switches?.on()
-            switchesoff?.off()
-            location.setMode("Away")
-            def att2 = switches.supportedAttributes
-            att2.each{
-                log.debug "wtf... $it.name"
+                initialize()
             }
-            def attr = monitor.supportedAttributes
-            attr.each{
-                log.debug "ok. $it.name, $it.values"
+
+            def updated() {
+                log.debug "Updated with settings: $settings"
+
+                unsubscribe()
+                initialize()
             }
-        }'''
-    data = '''switches?'''
+
+            def initialize() {
+                subscribe(switches, "switch.off", apphandler)
+            }
+
+            def apphandler(evt){
+                switchesoff?.off()
+            }
+        '''
     lexer = MyLexer()
     lexer.input(data)
     while True:

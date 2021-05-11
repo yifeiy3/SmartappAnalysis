@@ -133,6 +133,7 @@ def parseAST(ast):
                  2.A sideEffect list of the device changes the app may cause upon entry
                  when it calls the install function.
     '''
+    print(ast)
     blocks, funcDefs = ast 
     prefDict = parseBlock(blocks)
     subscribes, functions = parseFuncDefs(funcDefs, prefDict.keys())

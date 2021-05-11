@@ -2,16 +2,15 @@
 class deviceNode():
     def __init__(self, name):
         self.name = name
-        self.inNeighbors = []
-        self.outNeighbors = []
+        self.inNeighbors = {}
+        self.outNeighbors = {}
     
     def printNode(self):
         print("DeviceNode Name: {0}".format(self.name))
         print("In Neighbors:")
-        for inItems in self.inNeighbors:
-            print("\t{0}".format(inItems))
-        for outItems in self.outNeighbors:
-            print("\t{0}".format(outItems))
+        print("\t{0}".format(self.inNeighbors))
+        print("Out Neighbors:")
+        print("\t{0}".format(self.outNeighbors))
 
 class CFG():
     def __init__(self, deviceDict):
@@ -35,18 +34,85 @@ class CFG():
             param[1]'s state change to param[4] causes param[2]'s state change to param[5],
             via smartapp with name param[3]
         '''
+        def appendOrCreate(d, key1, key2, value):
+            if key1 not in d.keys():
+                d[key1] = {}
+                d[key1][key2] = [value] 
+            else:
+                if key2 not in d[key1].keys():
+                    d[key1][key2] = [value] 
+                else:
+                    d[key1][key2].append(value)
+    
         outDeviceNode = self.graph[deviceNameFrom]
 
-        #deviceNameFrom changes from currentState causes deviceNameTo to change to changedState
-        outDeviceNode.outNeighbors.append((smartappName, deviceNameTo, currentState, changedState))
+        #{currentState : {deviceNameTo: [(smartappName, changedState)]}}
+        appendOrCreate(outDeviceNode.outNeighbors, currentState, deviceNameTo, (smartappName, changedState))
+        
         inDeviceNode = self.graph[deviceNameTo]
-        inDeviceNode.inNeighbors.append((smartappName, deviceNameFrom, currentState, changedState))
+        #{changedState : {deviceNameFrom: [(smartappName, currentState)]}}
+        appendOrCreate(inDeviceNode.inNeighbors, changedState, deviceNameFrom, (smartappName, currentState))
+    
+    def findSingleRelationship(self, device, state):
+        '''
+            find relationship between devices via Smartapp edges for 1 device
+            @param the device and the starting state for the device
+        ''' 
+        relationships = {}
+        visited = {}
+        for devices in self.graph.keys():
+            visited[devices] = {}
+            for possibleStates in self.graph[devices].inNeighbors.keys():
+                visited[devices][possibleStates] = False 
+
+        visited[device][state] = False #the currentState of the device does not need to be an in State
+
+        startingStack = [(device, state, [])]
+        while startingStack:
+            outDevice, outState, currentPath = startingStack.pop(0)
+            if visited[outDevice][outState]:
+                continue 
+            addOrCreate(relationships, outDevice, outState, currentPath)
+            visited[outDevice][outState] = True 
+
+            outNeigh = self.graph[outDevice].outNeighbors
+            outEdges = {}
+            if outState in outNeigh.keys():
+                outEdges = outNeigh[outState]
+
+            for neighborDevices in outEdges.keys():
+                for smartapp, nextState in outEdges[neighborDevices]:
+                    print("smartapp: {1}, nextState: {2}, currentpath: {0}".format(currentPath, smartapp, nextState))
+                    newpath = currentPath + [smartapp]
+                    startingStack.append((neighborDevices, nextState, newpath))
+
+        return relationships
+    
+    def findRelationships(self):
+        '''
+            find relationship between devices via Smartapp as edges in the CFG
+            via DFS
+        '''
+        deviceRelationshipDict = {}
+        for devices in self.graph.keys():
+            deviceOutNeighbors = self.graph[devices].outNeighbors
+            for outStates in deviceOutNeighbors.keys():
+                rela = self.findSingleRelationship(devices, outStates)
+                addOrCreate(deviceRelationshipDict, devices, outStates, rela)
+        return deviceRelationshipDict
 
     def printCFG(self):
         print('Printed CFG:')
         print('*****************************************')
-        for deviceNodes in self.graph.keys():
-            self.graph[deviceNodes].printNode()
+        for deviceName in self.graph.keys():
+            self.graph[deviceName].printNode()
+
+def addOrCreate(d, key1, key2, value):
+    if key1 in d.keys():
+        d[key1][key2] = value  
+    else:
+        d[key1] = {}
+        d[key1][key2] = value 
 
 def buildCFG(relationDict, deviceDict):
     '''
@@ -59,7 +125,7 @@ def buildCFG(relationDict, deviceDict):
     cfg = CFG(deviceDict)
 
     for smartapps in relationDict.keys():
-        parsedrelations, parsedSideEffects = relationDict[smartapps]
+        parsedrelations = relationDict[smartapps]
 
         for devices in parsedrelations.keys():
             deviceNamesFrom = deviceDict[smartapps][devices]
@@ -71,4 +137,5 @@ def buildCFG(relationDict, deviceDict):
                             cfg.addEdge(deviceNameFrom, deviceNameTo, smartapps, currentState, changedState)
     
     cfg.printCFG()
-        
+    return cfg 
+    
