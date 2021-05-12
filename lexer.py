@@ -156,12 +156,6 @@ def MyLexer():
     return lex.lex()
 
 if __name__ == '__main__':
-    # data = '''def installed()
-    #     {
-    #         subscribe(switches, "switch.off", offhandler)
-    #         subscribe(location, changedLocationMode)
-    #         subscribe(app, timedTouch)
-    #     }'''
     data = '''
             definition(
                 name: "17355Project1",

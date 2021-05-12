@@ -118,7 +118,6 @@ class MyParser():
             p[0] = p[1]
         else:
             p[0] = [p[1]]
-        print("we got here in returning stmtlist with p[0]: {0}".format(p[0]))
         
     def p_stmt(self, p):
         '''stmt : functionCall
@@ -144,7 +143,6 @@ class MyParser():
     def p_functionCall_error(self, p):
         '''functionCall : IDENT LPAREN error NEWLINE
                     | IDENT error NEWLINE'''
-        print("we got here in function call with p[3]: {0}".format(p[3]))
         pass
 
     def p_functionWithObj(self, p):
@@ -156,7 +154,6 @@ class MyParser():
 
     def p_functionWithObj_error(self, p):
         'functionWithObj : IDENT DOT error NEWLINE'
-        print("we got here in function call with obj with p[3]: {0}".format(p[3]))
         pass
 
     def p_paramlist(self, p):
@@ -280,6 +277,5 @@ if __name__ == '__main__':
 
         
         '''
-    #result = parser.parse(s, lexer=MyLexer(), debug=log)
     result = parseObj.parseFile(s)
     print(result)

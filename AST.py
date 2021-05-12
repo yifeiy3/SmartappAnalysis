@@ -54,7 +54,6 @@ def parseFuncDefs(funcList, inputs):
                             _funcType, handleName = params[2]
                             _type, attributeName = params[1]
                             if handleName not in funcDict.keys():
-                                print(params)
                                 raise Exception("Unimplemented")
                             if objName in subscribeDict:
                                 subscribeDict[objName].append((attributeName, handleName))
@@ -138,16 +137,15 @@ def parseAST(ast):
     prefDict = parseBlock(blocks)
     subscribes, functions = parseFuncDefs(funcDefs, prefDict.keys())
 
-    print("subscribed devices dict: {0}".format(subscribes))
-    print("substribed functions dict: {0}".format(functions))
+    # print("subscribed devices dict: {0}".format(subscribes))
+    # print("substribed functions dict: {0}".format(functions))
     parsePostProcess(functions)
 
-    print("functions after postProcessing: {0}".format(functions))
+    # print("functions after postProcessing: {0}".format(functions))
     relationDict = constructRelations(subscribes, functions)
     #Installed is a function every smartapp needs to call when executing anything.
     #thus sideEffectDeviceChange records any other sideEffects our app may do not due to subscribed device changes.
     sideEffectDeviceChange, _fnCall = functions['installed'] 
-    print("final relation dict is: {0}".format(relationDict))
 
     return relationDict, list(set(sideEffectDeviceChange))
     

@@ -15,7 +15,8 @@ def checkCircularConflict(deviceRelationships):
         if devices == 'None':
             continue
         for posStates in deviceRelationships[devices].keys():
-            #the key must exist since there is a trivial path from this state to itself
+            if devices not in deviceRelationships[devices][posStates].keys():
+                continue
             selfreach = deviceRelationships[devices][posStates][devices]
             for inDeviceStates in selfreach.keys():
                 if inDeviceStates != posStates:
@@ -43,6 +44,5 @@ def checkDirectConflict(deviceRelationships):
             conflictingPathList.append(deviceRelationships[devices][posStates])
         if len(conflictingPathList) > 1:
             conflicts[devices] = conflictingPathList
-    #TODO: refine this
     return conflicts        
 

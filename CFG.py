@@ -64,7 +64,8 @@ class CFG():
             outDevice, outState, currentPath = startingStack.pop(0)
             if visited[outDevice][outState]:
                 continue 
-            appendOrCreate(relationships, outDevice, outState, currentPath)
+            if currentPath: #don't care about the trivial path
+                appendOrCreate(relationships, outDevice, outState, currentPath)
             visited[outDevice][outState] = True 
 
             outNeigh = self.graph[outDevice].outNeighbors
@@ -74,7 +75,7 @@ class CFG():
 
             for neighborDevices in outEdges.keys():
                 for smartapp, nextState in outEdges[neighborDevices]:
-                    print("smartapp: {1}, nextState: {2}, currentpath: {0}".format(currentPath, smartapp, nextState))
+                
                     newpath = currentPath + [smartapp]
                     startingStack.append((neighborDevices, nextState, newpath))
 
