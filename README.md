@@ -1,6 +1,6 @@
 # SmartappAnalysis
 
-## 17355 Final Project -- Yifei Yang
+## Program Analysis Final Project -- Yifei Yang
 
 ### Static Checking of Samsung Smartapps relationships in a household environment
 
@@ -27,6 +27,7 @@ To run the analysis, change `analysis.py` to your smartapp files, and specify
 what input device each smartapp is going to use, then, running
 
 ```python3 analysis.py``` 
+
 will generate the output file `analysisResult.txt` that describes the relationship graph and found conflicts/abnormalities.
 
 ### Limitations:
