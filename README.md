@@ -4,6 +4,8 @@
 
 ### Static Checking of Samsung Smartapps relationships in a household environment
 
+For a detailed description of implementation details, view `17355ProjectReport.pdf`.
+
 This app simply parses the codefile of Samsung Smartapps, and build a relationship
 graph between devices and their different states. The relationship between devices
 is created by edges represented by the smartapps. 
@@ -29,6 +31,10 @@ what input device each smartapp is going to use, then, running
 ```python3 analysis.py``` 
 
 will generate the output file `analysisResult.txt` that describes the relationship graph and found conflicts/abnormalities.
+
+Currently, the device input for each environment is manually inputed as a dictionary in 
+a format shown in `analysis.py`. One possible future work would be making such device
+input more user friendly by creating an interface.
 
 ### Limitations:
 This app only works for simple smartapps with relationships `if A happens then B happen` due to limitations
