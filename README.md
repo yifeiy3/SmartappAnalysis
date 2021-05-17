@@ -40,4 +40,5 @@ input more user friendly by creating an interface.
 This app only works for simple smartapps with relationships `if A happens then B happen` due to limitations
 in parsing. We would like to work into supporting more complicated relationships. We would like 
 to add support to more complicated smartapps with more complicated conditionals in the future. One
-example for such is smartapp with rules `if A or C happens then B happen`
+example for such is smartapp with rules `if A or C happens then B happen`. This can be done by expanding
+our language in lexing and parsing when building our AST.
