@@ -19,11 +19,19 @@ househould environment due to the smartapps, 3 types are shown by examples:
 1. Circularity: Device A changes to state S will trigger a chain of action to cause 
 Device A change back to state S' with smartapps.
 
+Example for such conflict is shown in `Smartapps/Circular`
+
 2. Direct Conflict: Device B and Device C can change Device A to different states at
 the same time due to smartapps
 
+
+Example for such conflict is shown in `Smartapps/DirecConf`
+
 3. Hidden: It is possible for us to change Device A to state S unintendedly. In our
 example an app that intends to turn on switch can unlock the door.
+
+
+Example for such conflict is shown in `Smartapps/Hidden`
 
 To run the analysis, change `analysis.py` to your smartapp files, and specify
 what input device each smartapp is going to use, then, running
